@@ -3,7 +3,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { Repository } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
+import { hashValue } from 'src/common/hash';
 
 @Injectable()
 export class UsersService {
@@ -11,6 +12,15 @@ export class UsersService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
   ) {}
+
+  async signup(CreateUserDto: CreateUserDto): Promise<User> {
+    const { password } = CreateUserDto;
+    const user = await this.userRepository.create({
+      ...CreateUserDto,
+      password: await hashValue(password),
+    });
+    return this.userRepository.save(user);
+  }
 
   create(createUserDto: CreateUserDto) {
     return this.userRepository.insert(createUserDto);
@@ -20,17 +30,23 @@ export class UsersService {
     return this.userRepository.find();
   }
 
-  findOne(id: number) {
-    return this.userRepository.findOne({
-      where: {
-          id: id,
-      }
-  });
+  findOne(query: FindOneOptions<User>) {
+    return this.userRepository.findOneOrFail(query);
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
+  findById(id: number) {
+    return this.userRepository.findOneBy({ id });
+  }
+
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const { password } = updateUserDto;
+    const user = this.findById(id);
     updateUserDto.id = id;
-    return this.userRepository.save(updateUserDto)
+    
+    if (password) {
+      updateUserDto.password = await hashValue(password);
+    }
+    return this.userRepository.save({...user, ...updateUserDto})
   }
 
   remove(id: number) {
