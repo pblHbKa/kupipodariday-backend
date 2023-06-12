@@ -18,7 +18,7 @@ export class AuthService {
         });
 
         if(user && (await verifyHash(password, user.password))) {
-            
+           return user; 
         }
     }
 
