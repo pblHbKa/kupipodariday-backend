@@ -21,7 +21,7 @@ export class AuthController {
         @AuthUser() user,
         @Body() signinUserDto: SiqninUserDto 
     ): Promise<any> {
-        console.log(user);
+        // console.log(user);
         return this.authService.login(user);
     }
 

@@ -3,7 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { FindOneOptions, Repository } from 'typeorm';
+import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 import { hashValue } from 'src/common/hash';
 
 @Injectable()
@@ -32,6 +32,10 @@ export class UsersService {
 
   findOne(query: FindOneOptions<User>) {
     return this.userRepository.findOneOrFail(query);
+  }
+
+  findMany(query: FindManyOptions<User>) {
+    return this.userRepository.find(query);
   }
 
   findById(id: number) {
