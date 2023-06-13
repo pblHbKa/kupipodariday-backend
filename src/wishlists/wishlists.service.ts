@@ -4,6 +4,7 @@ import { UpdateWishlistDto } from './dto/update-wishlist.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Wishlist } from './entities/wishlist.entity';
 import { Repository } from 'typeorm';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class WishlistsService {
@@ -12,8 +13,8 @@ export class WishlistsService {
     private wishListRepository: Repository<Wishlist>,
   ) {}
 
-  create(createWishlistDto: CreateWishlistDto) {
-    return this.wishListRepository.insert(createWishlistDto);
+  create(createWishlistDto: CreateWishlistDto, owner: User) {
+    return this.wishListRepository.insert({...createWishlistDto, owner});
   }
 
   findAll() {

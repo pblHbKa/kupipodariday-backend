@@ -47,15 +47,13 @@ export class UsersController {
 
   @Post('find')
   async findMany(@Body() body: {query: string}) {
-    let users = await this.usersService.findMany({
+    return await this.usersService.findMany({
       select: {username: true, about: true, id: true, avatar: true, createdAt: true, updatedAt: true, email: true},
-      where: {email: Like(`%${body.query}%`)}
+      where: [
+        {email: Like(`%${body.query}%`)},
+        {username: Like(`%${body.query}%`)}
+      ]
     });
-    users = users.concat(await this.usersService.findMany({
-      select: {username: true, about: true, id: true, avatar: true, createdAt: true, updatedAt: true, email: true},
-      where: {username: Like(`%${body.query}%`)}
-    }));
-    return users;
   }
 
   @Delete(':id')

@@ -40,6 +40,7 @@ export class Wish {
 
     @Column({
         type: "float",
+        default: 0,
     })
     raised: number;
 
@@ -57,6 +58,7 @@ export class Wish {
 
     @Column({
         type: "int",
+        default: 0,
     })
     copied: number;
 }

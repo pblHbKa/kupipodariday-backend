@@ -2,14 +2,27 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { WishesService } from './wishes.service';
 import { CreateWishDto } from './dto/create-wish.dto';
 import { UpdateWishDto } from './dto/update-wish.dto';
+import { AuthUser } from 'src/common/decorators/user.decorator';
+import { UsersService } from 'src/users/users.service';
 
 @Controller('wishes')
 export class WishesController {
-  constructor(private readonly wishesService: WishesService) {}
+  constructor(private readonly wishesService: WishesService,
+    private readonly usersService: UsersService) {}
 
   @Post()
   create(@Body() createWishDto: CreateWishDto) {
     return this.wishesService.create(createWishDto);
+  }
+
+  @Get('last')
+  last() {
+    return this.wishesService.last();
+  }
+
+  @Get('top')
+  top() {
+    return this.wishesService.top();
   }
 
   @Get()
@@ -30,5 +43,11 @@ export class WishesController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.wishesService.remove(+id);
+  }
+
+  @Post(':id/copy')
+  copy(@AuthUser() user, @Param('id') id: number) {
+    this.wishesService.copy(id);
+    this.wishesService.addToUserWishes(user.id, id);
   }
 }
