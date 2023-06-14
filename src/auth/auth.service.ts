@@ -26,7 +26,7 @@ export class AuthService {
         const { username, id: sub} = user;
 
         return {
-            access_token: await this.jwtService.signAsync({ username, sub }, {secret: process.env.JWT_KEY}),      
+            access_token: await this.jwtService.signAsync({ username, sub }),      
         };
     }
 }
