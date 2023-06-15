@@ -83,9 +83,8 @@ export class UsersController {
 
   @Patch('me')
   @UseGuards(JwtAuthGuard)
-  updateMe(@AuthUser() user, @Body() updateUserDto: UpdateUserDto) {
-    const { id } = user;
-    return this.usersService.update(id, updateUserDto);
+  updateMe(@AuthUser() user, @Body() updateUserDto: any) {
+    return this.usersService.update(user, updateUserDto);
   }
 
   @Post('find')

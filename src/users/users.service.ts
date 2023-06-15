@@ -42,11 +42,8 @@ export class UsersService {
     return this.userRepository.findOneBy({ id });
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
+  async update(user: User, updateUserDto: UpdateUserDto) {
     const { password } = updateUserDto;
-    const user = this.findById(id);
-    updateUserDto.id = id;
-
     if (password) {
       updateUserDto.password = await hashValue(password);
     }
