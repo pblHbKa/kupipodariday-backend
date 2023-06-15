@@ -1,7 +1,7 @@
 import { IsUrl, Length } from "class-validator";
 import { User } from "src/users/entities/user.entity";
 import { Wish } from "src/wishes/entities/wish.entity";
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, ManyToOne} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, ManyToOne, JoinTable} from "typeorm";
 
 @Entity()
 export class Wishlist {
@@ -23,8 +23,9 @@ export class Wishlist {
 
     @Column({
         type: "varchar",
+        default: "",
     })
-    @Length(1, 1500)
+    @Length(0, 1500)
     description: string;
 
     @Column({
@@ -34,7 +35,8 @@ export class Wishlist {
     image: string;
 
     @ManyToMany(() => Wish)
-    items: Wish;
+    @JoinTable()
+    items: Wish[];
 
     @ManyToOne(() => User, (users) => users.wishlists)
     owner: User;
