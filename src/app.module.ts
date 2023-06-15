@@ -31,7 +31,7 @@ import { AuthModule } from './auth/auth.module';
     WishesModule,
     WishlistsModule,
     OffersModule,
-    AuthModule
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [],

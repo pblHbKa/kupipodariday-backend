@@ -3,12 +3,12 @@ import { CreateWishlistDto } from './create-wishlist.dto';
 import { IsUrl } from 'class-validator';
 
 export class UpdateWishlistDto extends PartialType(CreateWishlistDto) {
-    name: string;
+  name: string;
 
-    @IsUrl()
-    image: string;
+  @IsUrl()
+  image: string;
 
-    itemsId: Array<number>;
+  itemsId: Array<number>;
 
-    id: number;
+  id: number;
 }

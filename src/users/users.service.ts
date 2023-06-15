@@ -46,15 +46,14 @@ export class UsersService {
     const { password } = updateUserDto;
     const user = this.findById(id);
     updateUserDto.id = id;
-    
+
     if (password) {
       updateUserDto.password = await hashValue(password);
     }
-    return this.userRepository.save({...user, ...updateUserDto})
+    return this.userRepository.save({ ...user, ...updateUserDto });
   }
 
   remove(id: number) {
     this.userRepository.delete(id);
   }
-
 }

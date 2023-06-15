@@ -7,11 +7,13 @@ import { AuthModule } from 'src/auth/auth.module';
 import { UsersModule } from 'src/users/users.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Wish]),
-  forwardRef(() => AuthModule),
-  forwardRef(() => UsersModule)],
+  imports: [
+    TypeOrmModule.forFeature([Wish]),
+    forwardRef(() => AuthModule),
+    forwardRef(() => UsersModule),
+  ],
   controllers: [WishesController],
   providers: [WishesService],
-  exports: [WishesService]
+  exports: [WishesService],
 })
-export class WishesModule { }
+export class WishesModule {}

@@ -8,8 +8,9 @@ import { WishesModule } from 'src/wishes/wishes.module';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Wishlist]),
-    forwardRef(() => WishesModule)],
+    forwardRef(() => WishesModule),
+  ],
   controllers: [WishlistsController],
-  providers: [WishlistsService]
+  providers: [WishlistsService],
 })
-export class WishlistsModule { }
+export class WishlistsModule {}

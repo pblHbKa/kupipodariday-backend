@@ -1,12 +1,11 @@
-import { IsNotEmpty } from "class-validator";
+import { IsNotEmpty } from 'class-validator';
 
 export class CreateOfferDto {
-    
-    @IsNotEmpty()
-    amount: number;
-    
-    hidden: boolean;
-    
-    @IsNotEmpty()
-    itemId: number;
+  @IsNotEmpty()
+  amount: number;
+
+  hidden: boolean;
+
+  @IsNotEmpty()
+  itemId: number;
 }

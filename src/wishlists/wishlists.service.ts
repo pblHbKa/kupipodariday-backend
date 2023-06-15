@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotAcceptableException,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
 import { UpdateWishlistDto } from './dto/update-wishlist.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -12,14 +16,14 @@ export class WishlistsService {
   constructor(
     @InjectRepository(Wishlist)
     private wishListRepository: Repository<Wishlist>,
-    private wishService: WishesService
+    private wishService: WishesService,
   ) {}
 
   async create(createWishlistDto: CreateWishlistDto, owner: User) {
     const items = await this.wishService.findMany({
-      where: { id: In(createWishlistDto.itemsId)}
+      where: { id: In(createWishlistDto.itemsId) },
     });
-    return this.wishListRepository.save({...createWishlistDto, owner, items});
+    return this.wishListRepository.save({ ...createWishlistDto, owner, items });
   }
 
   findAll(query: FindManyOptions<Wishlist>) {
@@ -33,17 +37,41 @@ export class WishlistsService {
   findById(id: number) {
     return this.wishListRepository.findOne({
       where: {
-          id: id,
-      }
-  });
+        id: id,
+      },
+    });
   }
 
-  update(id: number, updateWishlistDto: UpdateWishlistDto) {
+  async update(id: number, updateWishlistDto: UpdateWishlistDto, user: User) {
     updateWishlistDto.id = id;
+    const wishlist = await this.findOne({
+      where: { id },
+      relations: { owner: true },
+    });
+    if (!wishlist) {
+      throw new NotFoundException('Не найдена подборка подарков');
+    }
+    if (wishlist.owner.id !== user.id) {
+      throw new NotAcceptableException(
+        'Эта подборка принадлежит другому пользователю',
+      );
+    }
     return this.wishListRepository.save(updateWishlistDto);
   }
 
-  remove(id: number) {
+  async remove(id: number, user: User) {
+    const wishlist = await this.findOne({
+      where: { id },
+      relations: { owner: true },
+    });
+    if (!wishlist) {
+      throw new NotFoundException('Не найдена подборка подарков');
+    }
+    if (wishlist.owner.id !== user.id) {
+      throw new NotAcceptableException(
+        'Эта подборка принадлежит другому пользователю',
+      );
+    }
     this.wishListRepository.delete(id);
   }
 }

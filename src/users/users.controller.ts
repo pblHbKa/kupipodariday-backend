@@ -1,20 +1,30 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, NotFoundException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  NotFoundException,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthUser } from 'src/common/decorators/user.decorator';
-import { LocalAuthGuard } from 'src/auth/guard/local-auth.guard';
 import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 import { User } from './entities/user.entity';
-import { AuthGuard } from '@nestjs/passport';
 import { Like } from 'typeorm';
 import { WishesService } from 'src/wishes/wishes.service';
 import { Wish } from 'src/wishes/entities/wish.entity';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService,
-    private readonly wishService: WishesService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly wishService: WishesService,
+  ) {}
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
@@ -37,7 +47,7 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   myWishes(@AuthUser() user): Promise<Wish[]> {
     return this.wishService.findMany({
-      where: {owner: {id: user.id}}
+      where: { owner: { id: user.id } },
     });
   }
 
@@ -45,8 +55,15 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   findUsername(@Param('username') username: string): Promise<User> {
     return this.usersService.findOne({
-      select: {username: true, about: true, id: true, avatar: true, createdAt: true, updatedAt: true},
-      where: {username}
+      select: {
+        username: true,
+        about: true,
+        id: true,
+        avatar: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+      where: { username },
     });
   }
 
@@ -54,33 +71,39 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   async userWishes(@Param('username') username: string): Promise<Wish[]> {
     const ownerUser: User = await this.usersService.findOne({
-      where: {username}
+      where: { username },
     });
     if (!ownerUser) {
-      throw new NotFoundException("Не найден пользователь")
+      throw new NotFoundException('Не найден пользователь');
     }
     return this.wishService.findMany({
-      where: {owner: {id: ownerUser.id}}
+      where: { owner: { id: ownerUser.id } },
     });
   }
 
   @Patch('me')
   @UseGuards(JwtAuthGuard)
-  updateMe(
-    @AuthUser() user,
-    @Body() updateUserDto: UpdateUserDto) {
-      const { id } = user;
+  updateMe(@AuthUser() user, @Body() updateUserDto: UpdateUserDto) {
+    const { id } = user;
     return this.usersService.update(id, updateUserDto);
   }
 
   @Post('find')
-  async findMany(@Body() body: {query: string}) {
+  async findMany(@Body() body: { query: string }) {
     return await this.usersService.findMany({
-      select: {username: true, about: true, id: true, avatar: true, createdAt: true, updatedAt: true, email: true},
+      select: {
+        username: true,
+        about: true,
+        id: true,
+        avatar: true,
+        createdAt: true,
+        updatedAt: true,
+        email: true,
+      },
       where: [
-        {email: Like(`%${body.query}%`)},
-        {username: Like(`%${body.query}%`)}
-      ]
+        { email: Like(`%${body.query}%`) },
+        { username: Like(`%${body.query}%`) },
+      ],
     });
   }
 

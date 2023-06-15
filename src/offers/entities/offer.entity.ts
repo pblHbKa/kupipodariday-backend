@@ -1,33 +1,39 @@
-import { User } from "src/users/entities/user.entity";
-import { Wish } from "src/wishes/entities/wish.entity";
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne} from "typeorm";
+import { User } from 'src/users/entities/user.entity';
+import { Wish } from 'src/wishes/entities/wish.entity';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToOne,
+} from 'typeorm';
 
 @Entity()
 export class Offer {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @PrimaryGeneratedColumn()
-    id: number;
+  @CreateDateColumn()
+  createdAt: Date;
 
-    @CreateDateColumn()
-    createdAt: Date;
+  @UpdateDateColumn()
+  updatedAt: Date;
 
-    @UpdateDateColumn()
-    updatedAt: Date;
+  @ManyToOne(() => User)
+  user: User;
 
-    @ManyToOne(() => User)
-    user: User;
+  @ManyToOne(() => Wish)
+  item: Wish;
 
-    @ManyToOne(() => Wish)
-    item: Wish;
+  @Column({
+    type: 'float',
+  })
+  amount: number;
 
-    @Column({
-        type: "float",
-    })
-    amount: number;
-
-    @Column({
-        type: "boolean",
-        default: false,
-    })
-    hidden : boolean;
+  @Column({
+    type: 'boolean',
+    default: false,
+  })
+  hidden: boolean;
 }

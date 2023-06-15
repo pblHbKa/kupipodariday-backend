@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, NotFoundException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { WishesService } from './wishes.service';
 import { CreateWishDto } from './dto/create-wish.dto';
 import { UpdateWishDto } from './dto/update-wish.dto';
@@ -8,14 +17,14 @@ import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 
 @Controller('wishes')
 export class WishesController {
-  constructor(private readonly wishesService: WishesService,
-    private readonly usersService: UsersService) {}
+  constructor(
+    private readonly wishesService: WishesService,
+    private readonly usersService: UsersService,
+  ) {}
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  create(
-    @AuthUser() user,
-    @Body() createWishDto: CreateWishDto) {
+  create(@AuthUser() user, @Body() createWishDto: CreateWishDto) {
     return this.wishesService.create(createWishDto, user);
   }
 
@@ -37,17 +46,22 @@ export class WishesController {
   @Get(':id')
   @UseGuards(JwtAuthGuard)
   findOne(@Param('id') id: number) {
-    return this.wishesService.findOne(id);
+    return this.wishesService.findById(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: number, @Body() updateWishDto: UpdateWishDto) {
-    return this.wishesService.update(id, updateWishDto);
+  update(
+    @AuthUser() user,
+    @Param('id') id: number,
+    @Body() updateWishDto: UpdateWishDto,
+  ) {
+    return this.wishesService.update(id, updateWishDto, user);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.wishesService.remove(+id);
+  @UseGuards(JwtAuthGuard)
+  remove(@AuthUser() user, @Param('id') id: number) {
+    return this.wishesService.remove(id, user);
   }
 
   @Post(':id/copy')
