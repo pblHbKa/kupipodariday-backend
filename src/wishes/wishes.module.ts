@@ -11,6 +11,7 @@ import { UsersModule } from 'src/users/users.module';
   forwardRef(() => AuthModule),
   forwardRef(() => UsersModule)],
   controllers: [WishesController],
-  providers: [WishesService]
+  providers: [WishesService],
+  exports: [WishesService]
 })
 export class WishesModule { }

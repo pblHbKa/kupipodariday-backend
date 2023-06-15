@@ -3,8 +3,9 @@ import { CreateWishDto } from './dto/create-wish.dto';
 import { UpdateWishDto } from './dto/update-wish.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Wish } from './entities/wish.entity';
-import { Repository } from 'typeorm';
+import { FindManyOptions, Repository } from 'typeorm';
 import { NotFoundException } from '@nestjs/common';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class WishesService {
@@ -13,8 +14,8 @@ export class WishesService {
     private wishRepository: Repository<Wish>,
   ) { }
 
-  create(createWishDto: CreateWishDto) {
-    return this.wishRepository.insert(createWishDto);
+  create(createWishDto: CreateWishDto, owner) {
+    return this.wishRepository.insert({...createWishDto, owner});
   }
 
   last() {
@@ -48,8 +49,8 @@ export class WishesService {
   }
 
   update(id: number, updateWishDto: UpdateWishDto) {
-    // updateWishDto.id = id;
-    return this.wishRepository.save(updateWishDto);
+    const wish = this.findOne(id);
+    return this.wishRepository.save({...wish, ...updateWishDto});
   }
 
   remove(id: number) {
@@ -70,11 +71,13 @@ export class WishesService {
     return this.wishRepository.save({...wish, copied: (wish.copied + 1) });
   }
 
-  async addToUserWishes(idUser: number, idWish: number) {
-    let user = await this.findOne(idUser);
-    if(user) {
-      this.wishRepository.save({...this.findOne(idWish), owner: user});
-    }
+  async addToUserWishes(user: User, idWish: number) {
+    const wish = await this.findOne(idWish);
+    this.create(wish, user);
+  }
+
+  findMany(query: FindManyOptions<Wish>) {
+    return this.wishRepository.find(query);
   }
 
 }

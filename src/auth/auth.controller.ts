@@ -21,14 +21,12 @@ export class AuthController {
         @AuthUser() user,
         @Body() signinUserDto: SiqninUserDto 
     ): Promise<any> {
-        // console.log(user);
         return this.authService.login(user);
     }
 
     @Post('signup')
     async signup(@Body() createUserDto: CreateUserDto) {
         const user = await this.usersService.signup(createUserDto);
-        // return instanceToPlain(user);
         return user;
     }
 }

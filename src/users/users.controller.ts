@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, NotFoundException } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -8,10 +8,13 @@ import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 import { User } from './entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { Like } from 'typeorm';
+import { WishesService } from 'src/wishes/wishes.service';
+import { Wish } from 'src/wishes/entities/wish.entity';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService,
+    private readonly wishService: WishesService) {}
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
@@ -19,6 +22,7 @@ export class UsersController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   findAll() {
     return this.usersService.findAll();
   }
@@ -29,7 +33,16 @@ export class UsersController {
     return this.usersService.findById(user.id);
   }
 
+  @Get('me/wishes')
+  @UseGuards(JwtAuthGuard)
+  myWishes(@AuthUser() user): Promise<Wish[]> {
+    return this.wishService.findMany({
+      where: {owner: {id: user.id}}
+    });
+  }
+
   @Get(':username')
+  @UseGuards(JwtAuthGuard)
   findUsername(@Param('username') username: string): Promise<User> {
     return this.usersService.findOne({
       select: {username: true, about: true, id: true, avatar: true, createdAt: true, updatedAt: true},
@@ -37,7 +50,22 @@ export class UsersController {
     });
   }
 
+  @Get(':username/wishes')
+  @UseGuards(JwtAuthGuard)
+  async userWishes(@Param('username') username: string): Promise<Wish[]> {
+    const ownerUser: User = await this.usersService.findOne({
+      where: {username}
+    });
+    if (!ownerUser) {
+      throw new NotFoundException("Не найден пользователь")
+    }
+    return this.wishService.findMany({
+      where: {owner: {id: ownerUser.id}}
+    });
+  }
+
   @Patch('me')
+  @UseGuards(JwtAuthGuard)
   updateMe(
     @AuthUser() user,
     @Body() updateUserDto: UpdateUserDto) {

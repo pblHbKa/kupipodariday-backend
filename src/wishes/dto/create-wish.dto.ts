@@ -15,4 +15,5 @@ export class CreateWishDto {
     price: number;
 
     description: string;
+
 }
