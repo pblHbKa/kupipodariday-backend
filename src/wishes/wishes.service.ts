@@ -45,6 +45,7 @@ export class WishesService {
       where: {
         id: id,
       },
+      relations: {owner: true, offers: true}
     });
   }
 
@@ -82,6 +83,10 @@ export class WishesService {
       );
     }
     this.wishRepository.delete(id);
+  }
+
+  save(wish: Wish) {
+    return this.wishRepository.save(wish);
   }
 
   async copy(id: number) {

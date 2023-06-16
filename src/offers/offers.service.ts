@@ -38,6 +38,8 @@ export class OffersService {
     if (wish.price < totalOffers + createOfferDto.amount) {
       throw new NotAcceptableException('Превышена сумма подарка');
     }
+    wish.raised += createOfferDto.amount;
+    this.wishService.save(wish);
     return this.offerRepository.insert({ ...createOfferDto, user, item: wish });
   }
 
