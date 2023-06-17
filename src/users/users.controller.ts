@@ -11,12 +11,12 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { AuthUser } from '../../src/common/decorators/user.decorator';
-import { JwtAuthGuard } from '../../src/auth/guard/jwt-auth.guard';
+import { AuthUser } from 'src/common/decorators/user.decorator';
+import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 import { User } from './entities/user.entity';
 import { Like } from 'typeorm';
-import { WishesService } from '../../src/wishes/wishes.service';
-import { Wish } from '../../src/wishes/entities/wish.entity';
+import { WishesService } from 'src/wishes/wishes.service';
+import { Wish } from 'src/wishes/entities/wish.entity';
 
 @Controller('users')
 export class UsersController {

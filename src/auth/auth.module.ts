@@ -1,5 +1,5 @@
 import { Module, forwardRef } from '@nestjs/common';
-import { UsersModule } from '../../src/users/users.module';
+import { UsersModule } from 'src/users/users.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtConfigFactory } from '../config/jwt-config.factory';

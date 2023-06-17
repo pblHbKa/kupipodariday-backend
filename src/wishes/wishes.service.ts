@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Wish } from './entities/wish.entity';
 import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 import { NotFoundException } from '@nestjs/common';
-import { User } from '../../src/users/entities/user.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class WishesService {
@@ -45,7 +45,7 @@ export class WishesService {
       where: {
         id: id,
       },
-      relations: {owner: true, offers: true}
+      relations: { owner: true, offers: true },
     });
   }
 

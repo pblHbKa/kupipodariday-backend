@@ -11,9 +11,9 @@ import {
 import { WishlistsService } from './wishlists.service';
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
 import { UpdateWishlistDto } from './dto/update-wishlist.dto';
-import { AuthUser } from '../../src/common/decorators/user.decorator';
-import { JwtAuthGuard } from '../../src/auth/guard/jwt-auth.guard';
-import { WishesService } from '../../src/wishes/wishes.service';
+import { AuthUser } from 'src/common/decorators/user.decorator';
+import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
+import { WishesService } from 'src/wishes/wishes.service';
 
 @Controller('wishlistlists')
 export class WishlistsController {

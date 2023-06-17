@@ -8,8 +8,8 @@ import { UpdateOfferDto } from './dto/update-offer.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Offer } from './entities/offer.entity';
 import { FindManyOptions, Repository } from 'typeorm';
-import { User } from '../../src/users/entities/user.entity';
-import { WishesService } from '../../src/wishes/wishes.service';
+import { User } from 'src/users/entities/user.entity';
+import { WishesService } from 'src/wishes/wishes.service';
 
 @Injectable()
 export class OffersService {
