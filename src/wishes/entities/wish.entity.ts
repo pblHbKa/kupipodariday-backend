@@ -1,6 +1,6 @@
 import { IsUrl, Length } from 'class-validator';
-import { Offer } from 'src/offers/entities/offer.entity';
-import { User } from 'src/users/entities/user.entity';
+import { Offer } from '../../../src/offers/entities/offer.entity';
+import { User } from '../../../src/users/entities/user.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,

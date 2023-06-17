@@ -4,7 +4,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
-import { hashValue } from 'src/common/hash';
+import { hashValue } from '../../src/common/hash';
 
 @Injectable()
 export class UsersService {

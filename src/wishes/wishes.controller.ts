@@ -11,15 +11,13 @@ import {
 import { WishesService } from './wishes.service';
 import { CreateWishDto } from './dto/create-wish.dto';
 import { UpdateWishDto } from './dto/update-wish.dto';
-import { AuthUser } from 'src/common/decorators/user.decorator';
-import { UsersService } from 'src/users/users.service';
-import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
+import { AuthUser } from '../../src/common/decorators/user.decorator';
+import { JwtAuthGuard } from '../../src/auth/guard/jwt-auth.guard';
 
 @Controller('wishes')
 export class WishesController {
   constructor(
     private readonly wishesService: WishesService,
-    private readonly usersService: UsersService,
   ) {}
 
   @Post()

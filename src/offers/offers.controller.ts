@@ -11,8 +11,8 @@ import {
 import { OffersService } from './offers.service';
 import { CreateOfferDto } from './dto/create-offer.dto';
 import { UpdateOfferDto } from './dto/update-offer.dto';
-import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
-import { AuthUser } from 'src/common/decorators/user.decorator';
+import { JwtAuthGuard } from '../../src/auth/guard/jwt-auth.guard';
+import { AuthUser } from '../../src/common/decorators/user.decorator';
 
 @Controller('offers')
 @UseGuards(JwtAuthGuard)
