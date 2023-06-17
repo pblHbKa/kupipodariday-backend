@@ -45,7 +45,7 @@ export class WishesService {
       where: {
         id: id,
       },
-      relations: { owner: true, offers: true },
+      relations: { owner: true, offers: {user: true} },
     });
   }
 
